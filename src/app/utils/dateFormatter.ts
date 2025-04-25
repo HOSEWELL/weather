@@ -1,5 +1,3 @@
-// utils/dateFormatter.ts
-
 export const formatTimestamp = (timestamp: any): string => {
   try {
     const dateObj = new Date(timestamp?.seconds ? timestamp.seconds * 1000 : timestamp);
@@ -30,7 +28,7 @@ export const formatTimestamp = (timestamp: any): string => {
   }
 };
 
-// ➕ New function to only return the formatted date
+// formatted date
 export const formatDateOnly = (timestamp: any): string => {
   try {
     const dateObj = new Date(timestamp?.seconds ? timestamp.seconds * 1000 : timestamp);
@@ -38,9 +36,9 @@ export const formatDateOnly = (timestamp: any): string => {
     if (isNaN(dateObj.getTime())) return "Invalid date";
 
     return dateObj.toLocaleDateString([], {
-      weekday: 'short', // like Thu
-      month: 'short',   // like Apr
-      day: 'numeric',   // like 25
+      weekday: 'short',
+      month: 'short',  
+      day: 'numeric',
     });
   } catch (err) {
     console.error("Error formatting date only:", err);

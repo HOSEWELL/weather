@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import SearchBar from './components/SearchBar';
 import CurrentWeather from './components/CurrentWeather';
@@ -8,11 +8,27 @@ import ForecastDays from './components/ForecastDays';
 import WeatherMetrics from './components/WeatherMetrics';
 import { ForecastDay } from './components/types';
 import { WeatherData } from './components/types';
+import TeaserScreen from './components/TeaserScreen';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(false);
   const [unit, setUnit] = useState<'C' | 'F'>('C');
+  const [showTeaser, setShowTeaser] = useState(false);
+
+  // Check if user has seen the teaser before
+  useEffect(() => {
+    const hasSeenTeaser = localStorage.getItem('hasSeenTeaser');
+    if (!hasSeenTeaser) {
+      setShowTeaser(true);
+    }
+  }, []);
+
+  const handleDismissTeaser = () => {
+    localStorage.setItem('hasSeenTeaser', 'true');
+    setShowTeaser(false);
+  };
 
   const fetchWeather = async (city: string) => {
     if (!city.trim()) return;
@@ -42,7 +58,6 @@ export default function Home() {
       forecastData = await forecastRes.json();
 
       // Process forecast data to get next 3 days
-      const today = new Date();
       const nextDays: ForecastDay[] = [];
       const processedDates = new Set();
 
@@ -89,7 +104,14 @@ export default function Home() {
         <title>Weather App</title>
       </Head>
 
-      <div className="max-w-md mx-auto">
+      {showTeaser && <TeaserScreen onDismiss={handleDismissTeaser} />}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: showTeaser ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+        className="max-w-md mx-auto"
+      >
         {/* Search Area */}
         <SearchBar
           onSearch={fetchWeather}
@@ -129,7 +151,7 @@ export default function Home() {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
