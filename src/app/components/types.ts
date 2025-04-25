@@ -1,18 +1,30 @@
-export interface ForecastDay {
-    date: string;
-    minTemp: number;
-    maxTemp: number;
+// src/app/components/types.ts
+export interface ForecastItem {
+  dt: number;
+  main: {
+    temp_min: number;
+    temp_max: number;
+  };
+  weather: {
     icon: string;
-  }
-  
-  // Full weather data object including forecast
-  export interface WeatherData {
-    city: string;
-    country: string;
-    temp: number;
-    humidity: number;
     description: string;
-    icon: string;
-    windSpeed: number;
-    forecast: ForecastDay[];
-  }
+  }[];
+}
+
+export interface ForecastDay {
+  date: string;
+  minTemp: number;
+  maxTemp: number;
+  icon: string;
+}
+
+export interface WeatherData {
+  city: string;
+  country: string;
+  temp: number;
+  humidity: number;
+  description: string;
+  icon: string;
+  windSpeed: number;
+  forecast: ForecastDay[];
+}

@@ -1,6 +1,8 @@
-export const formatTimestamp = (timestamp: any): string => {
+export const formatTimestamp = (timestamp: number | { seconds: number } | Date): string => {
   try {
-    const dateObj = new Date(timestamp?.seconds ? timestamp.seconds * 1000 : timestamp);
+    const dateObj = timestamp instanceof Date ? timestamp : 
+                   typeof timestamp === 'number' ? new Date(timestamp) :
+                   new Date(timestamp.seconds * 1000);
 
     if (isNaN(dateObj.getTime())) return "Invalid date";
 
@@ -28,16 +30,17 @@ export const formatTimestamp = (timestamp: any): string => {
   }
 };
 
-// formatted date
-export const formatDateOnly = (timestamp: any): string => {
+export const formatDateOnly = (timestamp: number | { seconds: number } | Date): string => {
   try {
-    const dateObj = new Date(timestamp?.seconds ? timestamp.seconds * 1000 : timestamp);
+    const dateObj = timestamp instanceof Date ? timestamp : 
+                   typeof timestamp === 'number' ? new Date(timestamp) :
+                   new Date(timestamp.seconds * 1000);
 
     if (isNaN(dateObj.getTime())) return "Invalid date";
 
     return dateObj.toLocaleDateString([], {
       weekday: 'short',
-      month: 'short',  
+      month: 'short',
       day: 'numeric',
     });
   } catch (err) {

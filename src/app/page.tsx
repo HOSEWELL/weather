@@ -10,6 +10,7 @@ import { ForecastDay } from './components/types';
 import { WeatherData } from './components/types';
 import TeaserScreen from './components/TeaserScreen';
 import { motion } from 'framer-motion';
+import { ForecastItem } from './components/types';
 
 export default function Home() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -61,20 +62,21 @@ export default function Home() {
       const nextDays: ForecastDay[] = [];
       const processedDates = new Set();
 
-      forecastData.list.forEach((item: any) => {
-        const date = new Date(item.dt * 1000);
-        const dateStr = date.toDateString();
+      // Replace the forecastData.list.forEach line with:
+forecastData.list.forEach((item: ForecastItem) => {
+  const date = new Date(item.dt * 1000);
+  const dateStr = date.toDateString();
 
-        if (!processedDates.has(dateStr) && nextDays.length < 3) {
-          processedDates.add(dateStr);
-          nextDays.push({
-            date: `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`,
-            minTemp: item.main.temp_min,
-            maxTemp: item.main.temp_max,
-            icon: item.weather[0].icon
-          });
-        }
-      });
+  if (!processedDates.has(dateStr) && nextDays.length < 3) {
+    processedDates.add(dateStr);
+    nextDays.push({
+      date: `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`,
+      minTemp: item.main.temp_min,
+      maxTemp: item.main.temp_max,
+      icon: item.weather[0].icon
+    });
+  }
+});
 
       setWeather({
         city: weatherData.name,
